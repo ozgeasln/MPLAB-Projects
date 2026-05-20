@@ -1,6 +1,6 @@
 # MPLAB ve Proteus Mikrodenetleyici Projeleri 🚀
 
-Bu depo, mikrodenetleyici sistemleri tasarımı ve programlaması üzerine geliştirilen ödevleri, laboratuvar uygulamalarını ve simülasyon çalışmalarını içermektedir.
+Bu repo, mikrodenetleyici sistemleri tasarımı ve programlaması üzerine geliştirilen ödevleri, laboratuvar uygulamalarını ve simülasyon çalışmalarını içermektedir.
 
 ## 🛠 Kullanılan Teknolojiler ve Araçlar
 * **Geliştirme Ortamı:** MPLAB X IDE
@@ -21,4 +21,4 @@ Bu depo altındaki ana çalışmalar şunlardır:
 4. `Proteus` simülasyon dosyasını açın, devredeki mikrodenetleyiciye çift tıklayarak oluşturulan `.hex` dosyasını yükleyin ve simülasyonu başlatın.
 
 ---
-*Bu depo, akademik eğitim sürecimdeki çalışmaları derlemek ve versiyon kontrol sistemleri pratiği yapmak amacıyla oluşturulmuştur.*
+*Bu repo, akademik eğitim sürecimdeki çalışmaları derlemek ve versiyon kontrol sistemleri pratiği yapmak amacıyla oluşturulmuştur.*
