@@ -1,0 +1,42 @@
+MPLINK 5.09, LINKER
+Linker Map File - Created Wed May 20 18:58:31 2026
+
+                                 Section Info
+                  Section       Type    Address   Location Size(Bytes)
+                ---------  ---------  ---------  ---------  ---------
+                   .org_0       code   0x000000    program   0x000002
+                   .cinit    romdata   0x000001    program   0x000004
+                   .org_1       code   0x000004    program   0x000040
+.config_2007_BUILD/DEFAULT/PRODUCTION/ODEV4CO       code   0x002007    program   0x000002
+
+
+
+                              Program Memory Usage 
+                               Start         End      
+                           ---------   ---------      
+                            0x000000    0x000002      
+                            0x000004    0x000023      
+                            0x002007    0x002007      
+            36 out of 2182 program addresses used, program memory utilization is 1%
+
+
+
+                              Symbols - Sorted by Name
+                     Name    Address   Location    Storage File                     
+                ---------  ---------  ---------  --------- ---------                
+            ALARM_TETIKLE   0x00000d    program     static C:\MPLABProjects\odev4code.X\odev4code.asm
+                 ISR_EXIT   0x00000f    program     static C:\MPLABProjects\odev4code.X\odev4code.asm
+                     MAIN   0x000015    program     static C:\MPLABProjects\odev4code.X\odev4code.asm
+                MAIN_LOOP   0x000021    program     static C:\MPLABProjects\odev4code.X\odev4code.asm
+
+
+
+                              Symbols - Sorted by Address
+                     Name    Address   Location    Storage File                     
+                ---------  ---------  ---------  --------- ---------                
+            ALARM_TETIKLE   0x00000d    program     static C:\MPLABProjects\odev4code.X\odev4code.asm
+                 ISR_EXIT   0x00000f    program     static C:\MPLABProjects\odev4code.X\odev4code.asm
+                     MAIN   0x000015    program     static C:\MPLABProjects\odev4code.X\odev4code.asm
+                MAIN_LOOP   0x000021    program     static C:\MPLABProjects\odev4code.X\odev4code.asm
+
+

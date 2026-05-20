@@ -1,0 +1,4 @@
+Warning[205] C:\MPLABPROJECTS\MIKROODEV3.X\ODEV3CODE.ASM 1 : Found directive in column 1. (LIST)
+Message[302] C:\MPLABPROJECTS\MIKROODEV3.X\ODEV3CODE.ASM 30 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\MPLABPROJECTS\MIKROODEV3.X\ODEV3CODE.ASM 31 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\MPLABPROJECTS\MIKROODEV3.X\ODEV3CODE.ASM 34 : Register in operand not in bank 0.  Ensure that bank bits are correct.

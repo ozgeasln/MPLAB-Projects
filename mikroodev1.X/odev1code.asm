@@ -1,0 +1,162 @@
+
+LIST        P=16F628A
+    #INCLUDE    <P16F628A.INC>
+    __CONFIG    _INTOSC_OSC_NOCLKOUT & _WDT_OFF & _PWRTE_ON & _MCLRE_ON & _BOREN_ON & _LVP_OFF & _CP_OFF & _CPD_OFF
+    CBLOCK  0x20
+        YOLCU          
+        BIRLER         
+        ONLAR           
+        TEMP            
+        SAYAC1        
+        SAYAC2          
+        LEDFLAG         
+    ENDC
+    
+    ORG     0x00
+    GOTO    BASLA
+    
+SEGMENT_TABLO
+    ADDWF   PCL, F
+    DT      0x3F,0x06,0x5B,0x4F,0x66,0x6D,0x7D,0x07,0x7F,0x6F
+    
+BASLA
+    MOVLW   0x07
+    MOVWF   CMCON
+    BANKSEL TRISA
+    MOVLW   B'00000011'
+    MOVWF   TRISA
+    CLRF    TRISB
+    BANKSEL PORTA
+    CLRF    PORTA
+    CLRF    PORTB
+    CLRF YOLCU
+    CLRF ONLAR
+    CLRF BIRLER
+    MOVLW   B'10000000'   
+    MOVWF   LEDFLAG
+    
+ANA_DONGU
+    CALL    EKRAN_GUNCELLE
+    BTFSS   PORTA, 0
+    GOTO    INIS_KONTROL
+    MOVLW   .15
+    SUBWF   YOLCU, W
+    BTFSC   STATUS, Z
+    GOTO    BINIS_BEKLE
+    INCF    YOLCU, F
+    CALL    BASAMAK_AYIR
+    
+BINIS_BEKLE
+    CALL    EKRAN_GUNCELLE
+    BTFSC   PORTA, 0
+    GOTO    BINIS_BEKLE
+    GOTO    LED_KONTROL
+    
+INIS_KONTROL
+    BTFSS   PORTA, 1
+    GOTO    LED_KONTROL
+    MOVF    YOLCU, F
+    BTFSC   STATUS, Z
+    GOTO    INIS_BEKLE
+    DECF    YOLCU, F
+    CALL    BASAMAK_AYIR
+    
+INIS_BEKLE
+    CALL    EKRAN_GUNCELLE
+    BTFSC   PORTA, 1
+    GOTO    INIS_BEKLE
+    
+LED_KONTROL
+    MOVLW   .15
+    SUBWF   YOLCU, W
+    BTFSS   STATUS, Z
+    GOTO    BOS_DURUM
+    BSF     PORTA, 6
+    CLRF    LEDFLAG
+    GOTO    ANA_DONGU
+    
+BOS_DURUM
+    BCF     PORTA, 6
+    MOVLW   B'10000000'
+    MOVWF   LEDFLAG
+    GOTO    ANA_DONGU
+    
+BASAMAK_AYIR
+    MOVF    YOLCU, W
+    MOVWF   TEMP
+    CLRF    ONLAR
+    
+BOLME
+    MOVLW   .10
+    SUBWF   TEMP, W
+    BTFSS   STATUS, C
+    GOTO    BOLME_BITTI
+    MOVWF   TEMP
+    INCF    ONLAR, F
+    GOTO    BOLME
+    
+BOLME_BITTI
+    MOVF    TEMP, W
+    MOVWF   BIRLER
+    RETURN
+    
+EKRAN_GUNCELLE
+    MOVLW   .15
+    SUBWF   YOLCU, W
+    BTFSS   STATUS, Z
+    GOTO    NORMAL_GOSTERIM
+    MOVLW   0x3F
+    IORWF   LEDFLAG, W
+    MOVWF   PORTB
+    BSF     PORTA, 2
+    BCF     PORTA, 3
+    CALL    GECIKME
+    MOVLW   0x3F
+    IORWF   LEDFLAG, W
+    MOVWF   PORTB
+    BSF     PORTA, 3
+    BCF     PORTA, 2
+    CALL    GECIKME
+    BCF     PORTA, 2
+    BCF     PORTA, 3
+    MOVF    LEDFLAG, W
+    MOVWF   PORTB
+    RETURN
+    
+NORMAL_GOSTERIM
+    MOVF    BIRLER, W
+    CALL    SEGMENT_TABLO
+    IORWF   LEDFLAG, W
+    MOVWF   PORTB
+    BSF     PORTA, 2
+    BCF     PORTA, 3
+    CALL    GECIKME
+    MOVF    ONLAR, W
+    CALL    SEGMENT_TABLO
+    IORWF   LEDFLAG, W
+    MOVWF   PORTB
+    BSF     PORTA, 3
+    BCF     PORTA, 2
+    CALL    GECIKME
+    BCF     PORTA, 2
+    BCF     PORTA, 3
+    MOVF    LEDFLAG, W
+    MOVWF   PORTB
+    RETURN
+    
+GECIKME
+    MOVLW   .250
+    MOVWF   SAYAC2
+    
+GECIKME_DIS
+    MOVLW   .10
+    MOVWF   SAYAC1
+    
+GECIKME_IC
+    DECFSZ  SAYAC1, F
+    GOTO    GECIKME_IC
+    DECFSZ  SAYAC2, F
+    GOTO    GECIKME_DIS
+    RETURN
+    END
+

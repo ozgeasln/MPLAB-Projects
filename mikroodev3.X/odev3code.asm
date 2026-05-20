@@ -1,0 +1,154 @@
+LIST P=16F628A
+    INCLUDE "P16F628A.INC"
+    
+  
+    __CONFIG _FOSC_INTOSCIO & _WDTE_OFF & _PWRTE_ON & _MCLRE_ON & _BOREN_OFF & _LVP_OFF & _CPD_OFF & _CP_OFF
+
+   
+    
+    CBLOCK 0x20
+        DELAY_SEC       
+        TMR0_COUNT     
+        PED_COOLDOWN    
+        PED_FLAG       
+        TEMP_W          
+    ENDC
+
+    ORG 0x00
+    GOTO INIT
+
+ 
+INIT:
+   
+    MOVLW 0x07
+    MOVWF CMCON
+
+    BSF STATUS, RP0
+
+   
+    MOVLW 0x1F     
+    MOVWF TRISA
+    CLRF TRISB     
+
+    MOVLW B'11010111' 
+    MOVWF OPTION_REG
+
+    BCF STATUS, RP0
+
+    CLRF PED_COOLDOWN
+    CLRF PED_FLAG
+    
+   
+    MOVLW B'10101010' 
+    MOVWF PORTB
+
+
+MAIN:
+  
+    BTFSS PORTA, 0     
+    GOTO CHECK_YOL2     
+    
+   
+    MOVLW B'10101001'  
+    MOVWF PORTB
+    MOVLW D'4'        
+    CALL DELAY_ROUTINE
+    CALL PEDESTRIAN_CHECK
+
+CHECK_YOL2:
+    
+    BTFSS PORTA, 1    
+    GOTO CHECK_YOL3     
+    
+    MOVLW B'10100110'  
+    MOVWF PORTB
+    MOVLW D'3'         
+    CALL DELAY_ROUTINE
+    CALL PEDESTRIAN_CHECK
+
+CHECK_YOL3:
+  
+    BTFSS PORTA, 2       
+    GOTO CHECK_YOL4     
+    
+    MOVLW B'10011010' 
+    MOVWF PORTB
+    MOVLW D'4'        
+    CALL DELAY_ROUTINE
+    CALL PEDESTRIAN_CHECK
+
+CHECK_YOL4:
+
+    BTFSS PORTA, 3      
+    GOTO MAIN          
+    
+    MOVLW B'01101010'   
+    MOVWF PORTB
+    MOVLW D'3'        
+    CALL DELAY_ROUTINE
+    CALL PEDESTRIAN_CHECK
+
+    GOTO MAIN           
+
+
+PEDESTRIAN_CHECK:
+    BTFSS PED_FLAG, 0   
+    RETURN              
+
+   
+    MOVLW B'10101010'   
+    MOVWF PORTB
+    MOVLW D'2'         
+   
+    MOVWF DELAY_SEC
+PED_DELAY_LOOP:
+    CALL ONE_SEC_DELAY
+    DECFSZ DELAY_SEC, F
+    GOTO PED_DELAY_LOOP
+
+    CLRF PED_FLAG     
+    MOVLW D'12'       
+    MOVWF PED_COOLDOWN
+    RETURN
+
+DELAY_ROUTINE:
+    MOVWF DELAY_SEC
+DELAY_LOOP:
+    CALL ONE_SEC_DELAY
+    
+    
+    MOVF PED_COOLDOWN, F 
+    BTFSS STATUS, Z
+    GOTO DECREMENT_SEC  
+    
+    BTFSC PORTA, 4       
+    BSF PED_FLAG, 0       
+
+DECREMENT_SEC:
+    DECFSZ DELAY_SEC, F  
+    GOTO DELAY_LOOP
+    RETURN
+
+ONE_SEC_DELAY:
+   
+    MOVF PED_COOLDOWN, F
+    BTFSC STATUS, Z
+    GOTO DO_DELAY
+    DECF PED_COOLDOWN, F 
+
+DO_DELAY:
+    MOVLW D'15'           
+    MOVWF TMR0_COUNT
+
+TMR0_WAIT:
+    BCF INTCON, T0IF     
+    CLRF TMR0            
+TMR0_POLL:
+    BTFSS INTCON, T0IF   
+    GOTO TMR0_POLL       
+    
+    DECFSZ TMR0_COUNT, F 
+    GOTO TMR0_WAIT      
+    RETURN
+
+    END

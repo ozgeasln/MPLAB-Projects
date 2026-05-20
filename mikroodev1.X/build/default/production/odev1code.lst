@@ -1,0 +1,478 @@
+MPASM 5.87                     ODEV1CODE.ASM   4-9-2026  16:17:22         PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00001 
+Warning[205]: Found directive in column 1. (LIST)
+                      00002 LIST        P=16F628A
+                      00003     #INCLUDE    <P16F628A.INC>
+                      00001         LIST
+                      00002 
+                      00003 ;==========================================================================
+                      00004 ; Build date : Jan 06 2020
+                      00005 ;  MPASM PIC16F628A processor include
+                      00006 ; 
+                      00007 ;  (c) Copyright 1999-2020 Microchip Technology, All rights reserved
+                      00008 ;==========================================================================
+                      00009 
+                      00386         LIST
+2007   3F70           00004     __CONFIG    _INTOSC_OSC_NOCLKOUT & _WDT_OFF & _PWRTE_ON & _MCLRE_ON & _BOREN_ON & _LVP_OFF & _CP_OFF
+                             & _CPD_OFF
+                      00005     CBLOCK  0x20
+  00000020            00006         YOLCU          
+  00000021            00007         BIRLER         
+  00000022            00008         ONLAR           
+  00000023            00009         TEMP            
+  00000024            00010         SAYAC1        
+  00000025            00011         SAYAC2          
+  00000026            00012         LEDFLAG         
+                      00013     ENDC
+                      00014     
+                      00015     ORG     0x00
+0000   2???           00016     GOTO    BASLA
+                      00017     
+0001                  00018 SEGMENT_TABLO
+0001   0782           00019     ADDWF   PCL, F
+0002   343F 3406 345B 00020     DT      0x3F,0x06,0x5B,0x4F,0x66,0x6D,0x7D,0x07,0x7F,0x6F
+       344F 3466 346D 
+       347D 3407 347F 
+       346F 
+                      00021     
+000C                  00022 BASLA
+000C   3007           00023     MOVLW   0x07
+000D   009F           00024     MOVWF   CMCON
+000E   1683 1303      00025     BANKSEL TRISA
+0010   3003           00026     MOVLW   B'00000011'
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0011   0085           00027     MOVWF   TRISA
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0012   0186           00028     CLRF    TRISB
+0013   1283 1303      00029     BANKSEL PORTA
+0015   0185           00030     CLRF    PORTA
+0016   0186           00031     CLRF    PORTB
+0017   01A0           00032     CLRF YOLCU
+0018   01A2           00033     CLRF ONLAR
+0019   01A1           00034     CLRF BIRLER
+001A   3080           00035     MOVLW   B'10000000'   
+001B   00A6           00036     MOVWF   LEDFLAG
+MPASM 5.87                     ODEV1CODE.ASM   4-9-2026  16:17:22         PAGE  2
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00037     
+001C                  00038 ANA_DONGU
+001C   2???           00039     CALL    EKRAN_GUNCELLE
+001D   1C05           00040     BTFSS   PORTA, 0
+001E   2???           00041     GOTO    INIS_KONTROL
+001F   3064           00042     MOVLW   .100
+0020   0220           00043     SUBWF   YOLCU, W
+0021   1903           00044     BTFSC   STATUS, Z
+0022   2???           00045     GOTO    BINIS_BEKLE
+0023   0AA0           00046     INCF    YOLCU, F
+0024   2???           00047     CALL    BASAMAK_AYIR
+                      00048     
+0025                  00049 BINIS_BEKLE
+0025   2???           00050     CALL    EKRAN_GUNCELLE
+0026   1805           00051     BTFSC   PORTA, 0
+0027   2???           00052     GOTO    BINIS_BEKLE
+0028   2???           00053     GOTO    LED_KONTROL
+                      00054     
+0029                  00055 INIS_KONTROL
+0029   1C85           00056     BTFSS   PORTA, 1
+002A   2???           00057     GOTO    LED_KONTROL
+002B   08A0           00058     MOVF    YOLCU, F
+002C   1903           00059     BTFSC   STATUS, Z
+002D   2???           00060     GOTO    INIS_BEKLE
+002E   03A0           00061     DECF    YOLCU, F
+002F   2???           00062     CALL    BASAMAK_AYIR
+                      00063     
+0030                  00064 INIS_BEKLE
+0030   2???           00065     CALL    EKRAN_GUNCELLE
+0031   1885           00066     BTFSC   PORTA, 1
+0032   2???           00067     GOTO    INIS_BEKLE
+                      00068     
+0033                  00069 LED_KONTROL
+0033   3064           00070     MOVLW   .100
+0034   0220           00071     SUBWF   YOLCU, W
+0035   1D03           00072     BTFSS   STATUS, Z
+0036   2???           00073     GOTO    BOS_DURUM
+0037   1705           00074     BSF     PORTA, 6
+0038   01A6           00075     CLRF    LEDFLAG
+0039   2???           00076     GOTO    ANA_DONGU
+                      00077     
+003A                  00078 BOS_DURUM
+003A   1305           00079     BCF     PORTA, 6
+003B   3080           00080     MOVLW   B'10000000'
+003C   00A6           00081     MOVWF   LEDFLAG
+003D   2???           00082     GOTO    ANA_DONGU
+                      00083     
+003E                  00084 BASAMAK_AYIR
+003E   0820           00085     MOVF    YOLCU, W
+003F   00A3           00086     MOVWF   TEMP
+0040   01A2           00087     CLRF    ONLAR
+                      00088     
+0041                  00089 BOLME
+MPASM 5.87                     ODEV1CODE.ASM   4-9-2026  16:17:22         PAGE  3
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0041   300A           00090     MOVLW   .10
+0042   0223           00091     SUBWF   TEMP, W
+0043   1C03           00092     BTFSS   STATUS, C
+0044   2???           00093     GOTO    BOLME_BITTI
+0045   00A3           00094     MOVWF   TEMP
+0046   0AA2           00095     INCF    ONLAR, F
+0047   2???           00096     GOTO    BOLME
+                      00097     
+0048                  00098 BOLME_BITTI
+0048   0823           00099     MOVF    TEMP, W
+0049   00A1           00100     MOVWF   BIRLER
+004A   0008           00101     RETURN
+                      00102     
+004B                  00103 EKRAN_GUNCELLE
+004B   3064           00104     MOVLW   .100
+004C   0220           00105     SUBWF   YOLCU, W
+004D   1D03           00106     BTFSS   STATUS, Z
+004E   2???           00107     GOTO    NORMAL_GOSTERIM
+004F   303F           00108     MOVLW   0x3F
+0050   0426           00109     IORWF   LEDFLAG, W
+0051   0086           00110     MOVWF   PORTB
+0052   1505           00111     BSF     PORTA, 2
+0053   1185           00112     BCF     PORTA, 3
+0054   2???           00113     CALL    GECIKME
+0055   303F           00114     MOVLW   0x3F
+0056   0426           00115     IORWF   LEDFLAG, W
+0057   0086           00116     MOVWF   PORTB
+0058   1585           00117     BSF     PORTA, 3
+0059   1105           00118     BCF     PORTA, 2
+005A   2???           00119     CALL    GECIKME
+005B   1105           00120     BCF     PORTA, 2
+005C   1185           00121     BCF     PORTA, 3
+005D   0826           00122     MOVF    LEDFLAG, W
+005E   0086           00123     MOVWF   PORTB
+005F   0008           00124     RETURN
+                      00125     
+0060                  00126 NORMAL_GOSTERIM
+0060   0821           00127     MOVF    BIRLER, W
+0061   2???           00128     CALL    SEGMENT_TABLO
+0062   0426           00129     IORWF   LEDFLAG, W
+0063   0086           00130     MOVWF   PORTB
+0064   1505           00131     BSF     PORTA, 2
+0065   1185           00132     BCF     PORTA, 3
+0066   2???           00133     CALL    GECIKME
+0067   0822           00134     MOVF    ONLAR, W
+0068   2???           00135     CALL    SEGMENT_TABLO
+0069   0426           00136     IORWF   LEDFLAG, W
+006A   0086           00137     MOVWF   PORTB
+006B   1585           00138     BSF     PORTA, 3
+006C   1105           00139     BCF     PORTA, 2
+006D   2???           00140     CALL    GECIKME
+006E   1105           00141     BCF     PORTA, 2
+006F   1185           00142     BCF     PORTA, 3
+MPASM 5.87                     ODEV1CODE.ASM   4-9-2026  16:17:22         PAGE  4
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0070   0826           00143     MOVF    LEDFLAG, W
+0071   0086           00144     MOVWF   PORTB
+0072   0008           00145     RETURN
+                      00146     
+0073                  00147 GECIKME
+0073   30FA           00148     MOVLW   .250
+0074   00A5           00149     MOVWF   SAYAC2
+                      00150     
+0075                  00151 GECIKME_DIS
+0075   300A           00152     MOVLW   .10
+0076   00A4           00153     MOVWF   SAYAC1
+                      00154     
+0077                  00155 GECIKME_IC
+0077   0BA4           00156     DECFSZ  SAYAC1, F
+0078   2???           00157     GOTO    GECIKME_IC
+0079   0BA5           00158     DECFSZ  SAYAC2, F
+007A   2???           00159     GOTO    GECIKME_DIS
+007B   0008           00160     RETURN
+3F70                  00161     END
+MPASM 5.87                     ODEV1CODE.ASM   4-9-2026  16:17:22         PAGE  5
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+ADDEN                             00000003
+ADEN                              00000003
+ANA_DONGU                         0000001C
+BASAMAK_AYIR                      0000003E
+BASLA                             0000000C
+BINIS_BEKLE                       00000025
+BIRLER                            00000021
+BOLME                             00000041
+BOLME_BITTI                       00000048
+BOS_DURUM                         0000003A
+BRGH                              00000002
+C                                 00000000
+C1INV                             00000004
+C1OUT                             00000006
+C2INV                             00000005
+C2OUT                             00000007
+CCP1CON                           00000017
+CCP1IE                            00000002
+CCP1IF                            00000002
+CCP1M0                            00000000
+CCP1M1                            00000001
+CCP1M2                            00000002
+CCP1M3                            00000003
+CCP1X                             00000005
+CCP1Y                             00000004
+CCPR1                             00000015
+CCPR1H                            00000016
+CCPR1L                            00000015
+CIS                               00000003
+CM0                               00000000
+CM1                               00000001
+CM2                               00000002
+CMCON                             0000001F
+CMIE                              00000006
+CMIF                              00000006
+CREN                              00000004
+CSRC                              00000007
+DATA_CP_OFF                       00003FFF
+DATA_CP_ON                        00003EFF
+DC                                00000001
+EEADR                             0000009B
+EECON1                            0000009C
+EECON2                            0000009D
+EEDATA                            0000009A
+EEIE                              00000007
+EEIF                              00000007
+EKRAN_GUNCELLE                    0000004B
+F                                 00000001
+FERR                              00000002
+FSR                               00000004
+GECIKME                           00000073
+GECIKME_DIS                       00000075
+GECIKME_IC                        00000077
+MPASM 5.87                     ODEV1CODE.ASM   4-9-2026  16:17:22         PAGE  6
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+GIE                               00000007
+INDF                              00000000
+INIS_BEKLE                        00000030
+INIS_KONTROL                      00000029
+INTCON                            0000000B
+INTE                              00000004
+INTEDG                            00000006
+INTF                              00000001
+IRP                               00000007
+LEDFLAG                           00000026
+LED_KONTROL                       00000033
+NORMAL_GOSTERIM                   00000060
+NOT_BO                            00000000
+NOT_BOD                           00000000
+NOT_BOR                           00000000
+NOT_PD                            00000003
+NOT_POR                           00000001
+NOT_RBPU                          00000007
+NOT_T1SYNC                        00000002
+NOT_TO                            00000004
+OERR                              00000001
+ONLAR                             00000022
+OPTION_REG                        00000081
+OSCF                              00000003
+PCL                               00000002
+PCLATH                            0000000A
+PCON                              0000008E
+PEIE                              00000006
+PIE1                              0000008C
+PIR1                              0000000C
+PORTA                             00000005
+PORTB                             00000006
+PR2                               00000092
+PS0                               00000000
+PS1                               00000001
+PS2                               00000002
+PSA                               00000003
+RA0                               00000000
+RA1                               00000001
+RA2                               00000002
+RA3                               00000003
+RA4                               00000004
+RA5                               00000005
+RA6                               00000006
+RA7                               00000007
+RB0                               00000000
+RB1                               00000001
+RB2                               00000002
+RB3                               00000003
+RB4                               00000004
+RB5                               00000005
+RB6                               00000006
+RB7                               00000007
+MPASM 5.87                     ODEV1CODE.ASM   4-9-2026  16:17:22         PAGE  7
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+RBIE                              00000003
+RBIF                              00000000
+RCIE                              00000005
+RCIF                              00000005
+RCREG                             0000001A
+RCSTA                             00000018
+RD                                00000000
+RP0                               00000005
+RP1                               00000006
+RX9                               00000006
+RX9D                              00000000
+SAYAC1                            00000024
+SAYAC2                            00000025
+SEGMENT_TABLO                     00000001
+SPBRG                             00000099
+SPEN                              00000007
+SREN                              00000005
+STATUS                            00000003
+SYNC                              00000004
+T0CS                              00000005
+T0IE                              00000005
+T0IF                              00000002
+T0SE                              00000004
+T1CKPS0                           00000004
+T1CKPS1                           00000005
+T1CON                             00000010
+T1OSCEN                           00000003
+T2CKPS0                           00000000
+T2CKPS1                           00000001
+T2CON                             00000012
+TEMP                              00000023
+TMR0                              00000001
+TMR0IE                            00000005
+TMR0IF                            00000002
+TMR1                              0000000E
+TMR1CS                            00000001
+TMR1H                             0000000F
+TMR1IE                            00000000
+TMR1IF                            00000000
+TMR1L                             0000000E
+TMR1ON                            00000000
+TMR2                              00000011
+TMR2IE                            00000001
+TMR2IF                            00000001
+TMR2ON                            00000002
+TOUTPS0                           00000003
+TOUTPS1                           00000004
+TOUTPS2                           00000005
+TOUTPS3                           00000006
+TRISA                             00000085
+TRISA0                            00000000
+TRISA1                            00000001
+TRISA2                            00000002
+MPASM 5.87                     ODEV1CODE.ASM   4-9-2026  16:17:22         PAGE  8
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+TRISA3                            00000003
+TRISA4                            00000004
+TRISA5                            00000005
+TRISA6                            00000006
+TRISA7                            00000007
+TRISB                             00000086
+TRISB0                            00000000
+TRISB1                            00000001
+TRISB2                            00000002
+TRISB3                            00000003
+TRISB4                            00000004
+TRISB5                            00000005
+TRISB6                            00000006
+TRISB7                            00000007
+TRMT                              00000001
+TX9                               00000006
+TX9D                              00000000
+TXEN                              00000005
+TXIE                              00000004
+TXIF                              00000004
+TXREG                             00000019
+TXSTA                             00000098
+VR0                               00000000
+VR1                               00000001
+VR2                               00000002
+VR3                               00000003
+VRCON                             0000009F
+VREN                              00000007
+VROE                              00000006
+VRR                               00000005
+W                                 00000000
+WR                                00000001
+WREN                              00000002
+WRERR                             00000003
+YOLCU                             00000020
+Z                                 00000002
+_BODEN_OFF                        00003FBF
+_BODEN_ON                         00003FFF
+_BOREN_OFF                        00003FBF
+_BOREN_ON                         00003FFF
+_CONFIG                           00002007
+_CPD_OFF                          00003FFF
+_CPD_ON                           00003EFF
+_CP_OFF                           00003FFF
+_CP_ON                            00001FFF
+_DEVID1                           00002006
+_ER_OSC_CLKOUT                    00003FFF
+_ER_OSC_NOCLKOUT                  00003FFE
+_EXTCLK_OSC                       00003FEF
+_FOSC_ECIO                        00003FEF
+_FOSC_EXTRCCLK                    00003FFF
+_FOSC_EXTRCIO                     00003FFE
+_FOSC_HS                          00003FEE
+MPASM 5.87                     ODEV1CODE.ASM   4-9-2026  16:17:22         PAGE  9
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+_FOSC_INTOSCCLK                   00003FFD
+_FOSC_INTOSCIO                    00003FFC
+_FOSC_LP                          00003FEC
+_FOSC_XT                          00003FED
+_HS_OSC                           00003FEE
+_IDLOC0                           00002000
+_IDLOC1                           00002001
+_IDLOC2                           00002002
+_IDLOC3                           00002003
+_INTOSC_OSC_CLKOUT                00003FFD
+_INTOSC_OSC_NOCLKOUT              00003FFC
+_INTRC_OSC_CLKOUT                 00003FFD
+_INTRC_OSC_NOCLKOUT               00003FFC
+_LP_OSC                           00003FEC
+_LVP_OFF                          00003F7F
+_LVP_ON                           00003FFF
+_MCLRE_OFF                        00003FDF
+_MCLRE_ON                         00003FFF
+_PWRTE_OFF                        00003FFF
+_PWRTE_ON                         00003FF7
+_RC_OSC_CLKOUT                    00003FFF
+_RC_OSC_NOCLKOUT                  00003FFE
+_WDTE_OFF                         00003FFB
+_WDTE_ON                          00003FFF
+_WDT_OFF                          00003FFB
+_WDT_ON                           00003FFF
+_XT_OSC                           00003FED
+__16F628A                         00000001
+
+Errors   :     0
+Warnings :     1 reported,     0 suppressed
+Messages :     2 reported,     0 suppressed
+
+
