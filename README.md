@@ -1,24 +1,31 @@
-# MPLAB ve Proteus Mikrodenetleyici Projeleri 🚀
+MPLAB and Proteus Microcontroller Projects 🚀
+This repository contains assignments, laboratory applications, and simulation studies developed on microcontroller systems design and programming.
 
-Bu repo, mikrodenetleyici sistemleri tasarımı ve programlaması üzerine geliştirilen ödevleri, laboratuvar uygulamalarını ve simülasyon çalışmalarını içermektedir.
+🛠 Technologies and Tools Used
+Development Environment: MPLAB X IDE
 
-## 🛠 Kullanılan Teknolojiler ve Araçlar
-* **Geliştirme Ortamı:** MPLAB X IDE
-* **Devre Simülasyonu:** Proteus Design Suite
-* **Programlama Dili:** C / Assembly (Kullanmadığını silebilirsin)
-* **Versiyon Kontrol:** Git & GitHub
+Circuit Simulation: Proteus Design Suite
 
-## 📁 Proje İçeriği
-Bu depo altındaki ana çalışmalar şunlardır:
-* **`mikroodev1.X`**: [Örn: Temel Giriş/Çıkış işlemleri ve LED yakıp söndürme uygulaması]
-* **`mikroodev2.X`**: [Örn: Buton kontrolü ile sayıcı devresi tasarımı]
-* **`Proteus_Simulasyon`**: [Örn: MPLAB'da yazılan kodların donanım üzerinde test edildiği Proteus şema dosyaları]
+Programming Language: C / Assembly (You can delete the one you don't use)
 
-## ⚙️ Nasıl Çalıştırılır?
-1. Bu projeyi bilgisayarınıza klonlayın veya `.zip` olarak indirin.
-2. `MPLAB X IDE` programını açın ve `.X` uzantılı proje klasörlerinden birini içe aktarın (Import).
-3. Kodu derleyerek (Build) `.hex` dosyasını oluşturun.
-4. `Proteus` simülasyon dosyasını açın, devredeki mikrodenetleyiciye çift tıklayarak oluşturulan `.hex` dosyasını yükleyin ve simülasyonu başlatın.
+Version Control: Git & GitHub
 
+📁 Project Contents
+The main works under this repository are as follows:
+
+mikroodev1.X: [Ex: Basic Input/Output operations and LED blinking application]
+
+mikroodev2.X: [Ex: Counter circuit design with button control]
+
+Proteus_Simulation: [Ex: Proteus schematic files where codes written in MPLAB are tested on hardware]
+
+⚙️ How to Run?
+Clone this project to your computer or download it as a .zip file.
+
+Open the MPLAB X IDE program and import one of the project folders with the .X extension.
+
+Build the code to generate the .hex file.
+
+Open the Proteus simulation file, double-click on the microcontroller in the circuit to load the generated .hex file, and start the simulation.
 ---
-*Bu repo, akademik eğitim sürecimdeki çalışmaları derlemek ve versiyon kontrol sistemleri pratiği yapmak amacıyla oluşturulmuştur.*
+*This repository was created to compile the projects from my academic education and to practice using version control systems.*
